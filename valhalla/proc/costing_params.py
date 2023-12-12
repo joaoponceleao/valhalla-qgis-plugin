@@ -645,9 +645,9 @@ class CostingPedestrian:
             QgsProcessingParameterNumber(
                 name=PED_COSTING.SPEED,
                 description="Walking speed",
-                type=QgsProcessingParameterNumber.Integer,
-                minValue=1,
-                maxValue=100,
+                type=QgsProcessingParameterNumber.Double,
+                minValue=0.5,
+                maxValue=30.0,
                 optional=True,
             )
         )

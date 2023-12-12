@@ -1315,7 +1315,7 @@
                 </attribute>
                 <layout class="QGridLayout" name="gridLayout_10">
                  <item row="0" column="3">
-                  <widget class="QSpinBox" name="bicycle_cycling_speed"/>
+                  <widget class="QDoubleSpinBox" name="bicycle_cycling_speed"/>
                  </item>
                  <item row="0" column="1">
                   <widget class="QComboBox" name="bicycle_bicycle_type">
@@ -1649,7 +1649,7 @@
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QSpinBox" name="pedestrian_walking_speed"/>
+                  <widget class="QDoubleSpinBox" name="pedestrian_walking_speed"/>
                  </item>
                  <item row="3" column="0" colspan="4">
                   <widget class="QgsCollapsibleGroupBox" name="mGroupBox_10">

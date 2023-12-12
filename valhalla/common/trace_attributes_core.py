@@ -40,12 +40,11 @@ def get_fields(t: str) -> QgsFields:
     :returns: initialized QgsFields object
     """
 
-
     fields = QgsFields()
-    if t == 'edge':
+    if t == "edge":
         fields.append(QgsField("EDGE_ID", QVariant.Double))
         fields.append(QgsField("OSM_ID", QVariant.Double))
-        fields.append(QgsField("SPEED", QVariant.Int))
+        fields.append(QgsField("SPEED", QVariant.Double))
         fields.append(QgsField("LENGTH", QVariant.Double))
         fields.append(QgsField("MEAN_ELEVATION", QVariant.Int))
         fields.append(QgsField("SRC_PERC", QVariant.Double))
@@ -65,32 +64,43 @@ def get_output_features(response: dict) -> Tuple[List[QgsFeature], List[QgsFeatu
     """
     edge_feats, point_feats = [], []
 
-    shape_pts = [list(reversed(coord)) for coord in decode_polyline6(response['shape'])]
+    shape_pts = [list(reversed(coord)) for coord in decode_polyline6(response["shape"])]
 
-    for edge in response['edges']:
+    for edge in response["edges"]:
         feat = QgsFeature()
-        coords = [QgsPointXY(x, y) for x, y in shape_pts[edge['begin_shape_index'] : edge['end_shape_index'] + 1]]
+        coords = [
+            QgsPointXY(x, y)
+            for x, y in shape_pts[
+                edge["begin_shape_index"] : edge["end_shape_index"] + 1
+            ]
+        ]
         feat.setGeometry(QgsGeometry.fromPolylineXY(coords))
-        feat.setAttributes([
-            edge['id'],
-            edge['way_id'],
-            edge['speed'],
-            edge['length'],
-            edge.get('mean_elevation'),
-            edge.get('source_percent_along'),
-            edge.get('target_percent_along')
-        ])
+        feat.setAttributes(
+            [
+                edge["id"],
+                edge["way_id"],
+                edge["speed"],
+                edge["length"],
+                edge.get("mean_elevation"),
+                edge.get("source_percent_along"),
+                edge.get("target_percent_along"),
+            ]
+        )
         edge_feats.append(feat)
 
-    for point in response['matched_points']:
+    for point in response["matched_points"]:
         feat = QgsFeature()
-        feat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(point['lon'], point['lat'])))
-        feat.setAttributes([
-            point['type'],
-            point.get('edge_index') or 0,
-            point.get('distance_along_edge') or 0,
-            point.get('distance_from_trace_point') or 0,
-        ])
+        feat.setGeometry(
+            QgsGeometry.fromPointXY(QgsPointXY(point["lon"], point["lat"]))
+        )
+        feat.setAttributes(
+            [
+                point["type"],
+                point.get("edge_index") or 0,
+                point.get("distance_along_edge") or 0,
+                point.get("distance_from_trace_point") or 0,
+            ]
+        )
         point_feats.append(feat)
 
     return edge_feats, point_feats
